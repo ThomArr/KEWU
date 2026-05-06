@@ -5,6 +5,14 @@ KEWU uses:
 -AES CTR
 -TLS 1.3
 
+## Install Rust
+
+```bash
+curl https://sh.rustup.rs -sSf | sh
+source $HOME/.cargo/env
+rustup default stable
+```
+
 ## Build 
 ```bash
 cargo build --release

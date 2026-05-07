@@ -7,11 +7,7 @@ KEWU uses:
 
 ## Install Rust
 
-```bash
-curl https://sh.rustup.rs -sSf | sh
-source $HOME/.cargo/env
-rustup default stable
-```
+Follow the official Rust installation guide: https://doc.rust-lang.org/book/ch01-01-installation.html
 
 ## Build 
 ```bash

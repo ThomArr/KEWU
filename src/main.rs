@@ -1,7 +1,5 @@
 use openssl::rand::rand_bytes;
-use openssl::ssl::{
-    SslConnector, SslMethod, SslOptions, SslStream, SslVerifyMode, SslVersion,
-};
+use openssl::ssl::{SslConnector, SslMethod, SslOptions, SslStream, SslVerifyMode, SslVersion};
 use std::env;
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
@@ -64,13 +62,7 @@ fn handle_client(
     identity: Option<String>,
     psk_hex: Option<String>,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let mut tls = connect_hsm(
-        &host,
-        port,
-        &sni,
-        identity.as_deref(),
-        psk_hex.as_deref(),
-    )?;
+    let mut tls = connect_hsm(&host, port, &sni, identity.as_deref(), psk_hex.as_deref())?;
 
     let mut buf = [0u8; 4096];
 
@@ -150,7 +142,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let local_port: u16 = args[1].parse()?;
 
-    if local_port < 1024 { // local_port < 2^16
+    // local_port < 2^16
+    if local_port < 1024 {
         return Err("port must be >= 1024".into());
     }
 
@@ -183,14 +176,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 // One thread per TCP client.
                 // This allows multiple local clients to use the server at the same time.
                 std::thread::spawn(move || {
-                    if let Err(e) = handle_client(
-                        client,
-                        host,
-                        remote_port,
-                        sni,
-                        identity,
-                        psk_hex,
-                    ) {
+                    if let Err(e) = handle_client(client, host, remote_port, sni, identity, psk_hex)
+                    {
                         debugerr!("client error: {e}");
                     }
                 });

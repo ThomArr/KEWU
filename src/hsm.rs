@@ -126,7 +126,6 @@ fn aes_ctr_decrypt(
     Ok(output)
 }
 
-
 fn check_slot(slot: u8) -> Result<(), Box<dyn Error>> {
     if slot > 3 {
         return Err("slot must be in [0, 3]".into());
@@ -136,21 +135,14 @@ fn check_slot(slot: u8) -> Result<(), Box<dyn Error>> {
 }
 
 fn increment_counter(counter: &mut [u8; 16]) {
-    let mut n = u32::from_be_bytes([
-        counter[12],
-        counter[13],
-        counter[14],
-        counter[15],
-    ]);
+    let mut n = u32::from_be_bytes([counter[12], counter[13], counter[14], counter[15]]);
 
     n += 1;
 
     counter[12..].copy_from_slice(&n.to_be_bytes());
 }
 
-fn read_hsm_response(
-    tls: &mut SslStream<TcpStream>,
-) -> Result<Vec<u8>, Box<dyn Error>> {
+fn read_hsm_response(tls: &mut SslStream<TcpStream>) -> Result<Vec<u8>, Box<dyn Error>> {
     let mut buf = [0u8; 4096];
     let n = tls.read(&mut buf)?;
 

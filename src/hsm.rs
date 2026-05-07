@@ -64,18 +64,18 @@ fn aes_ctr_encrypt(
 ) -> Result<Vec<u8>, Box<dyn Error>> {
     use rand::RngCore;
 
-    // 12 bytes de nonce aléatoire
+    // 12 bytes of random nonce
     let mut counter = [0u8; 16];
     rand::thread_rng().fill_bytes(&mut counter[..12]);
 
-    // compteur initial = 0
+    // initial counter = 0
     counter[12..].copy_from_slice(&0u32.to_be_bytes());
 
     let nonce = counter[..12].to_vec();
 
     let mut output = Vec::with_capacity(12 + input.len());
 
-    // On préfixe le ciphertext avec le nonce.
+    // The ciphertext is prefixed with the nonce.
     output.extend_from_slice(&nonce);
 
     for chunk in input.chunks(16) {
